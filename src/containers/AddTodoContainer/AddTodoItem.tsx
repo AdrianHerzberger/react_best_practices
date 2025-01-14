@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import TextField from "../../components/TextField/TextField";
 import Button from "../../components/Button/Button";
 import { Box, Grid2 } from "@mui/material";
+import useAutoFocus from "../../hooks/useAutoFocus";
 
 type AddTodoItemProps = {
     onAddClicked: (task: string) => void;
@@ -13,18 +14,21 @@ export const AddTodoItem = ({
 }: AddTodoItemProps) => {
     const [task, setTask] = useState<string>("")
 
+    const inputRef = useAutoFocus();
+
     const onTaskFieldChanges = (value: string) => {
         setTask(value);
         console.log(task);
     }
 
-    const onClickAdd = () => {
+    const onFormSubmitted = (event: any) => {
+        event.preventDefault();
         onAddClicked(task);
         setTask("")
     }
 
     return (
-        <form>
+        <form onSubmit={onFormSubmitted}>
             <Grid2
                 container
                 direction="row"
@@ -33,10 +37,10 @@ export const AddTodoItem = ({
                     alignItems: "center",
                 }}>
                 <Box>
-                    <TextField onInput={onTaskFieldChanges} value={task}></TextField>
+                    <TextField onInput={onTaskFieldChanges} value={task} ref={inputRef}></TextField>
                 </Box>
                 <Box>
-                    <Button onClick={onClickAdd} primary>Add</Button>
+                    <Button type="submit" primary>Add</Button>
                 </Box>
             </Grid2>
         </form>
