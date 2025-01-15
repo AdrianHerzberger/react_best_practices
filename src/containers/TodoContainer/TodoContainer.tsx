@@ -1,17 +1,19 @@
-import React, { useState } from "react"
+import { useEffect, useState } from "react"
 import { TodoItem } from "./TodoItem/TodoItem";
 import { Todo } from "../../models/Todo";
 import AddTodoItem from "../AddTodoContainer/AddTodoItem";
 
 
-type TodoContainerProps = {
-    todos?: Todo[];
-}
+export const TodoContainer = () => {
+    const [todos, setTodos] = useState<Todo[]>([]);
 
-export const TodoContainer = ({
-    todos
-}: TodoContainerProps) => {
-    const [todoList, setTodoList] = useState<Todo[]>([]);
+    useEffect(() => {
+        fetch("http://localhost:3001/todos").then((response) => {
+            response.json().then((toDoData) => {
+                setTodos(toDoData);
+            });
+        });
+    }, []);
 
     const onEditClicked = ({ id }: { id: number }) => {
         console.log("Edit clicked for ID:", id);
@@ -19,26 +21,27 @@ export const TodoContainer = ({
 
     const onDeleteClicked = ({ id }: { id: number }) => {
         console.log("Delete clicked for ID:", id);
-        setTodoList(todoList.filter(todo => todo.id !== id));
+        setTodos(todos.filter(todo => todo.id !== id));
     }
 
     const onDoneChecked = ({ id, isDone }: { id: number; isDone: boolean }) => {
         console.log("Done toggled for ID:", id, "isDone:", isDone);
-        setTodoList(
-            todoList.map(todo => (todo.id === id ? { ...todo, isDone } : todo))
+        setTodos(
+            todos.map(todo => (todo.id === id ? { ...todo, isDone } : todo))
         );
     };
 
-    const onAddClicked = (event: string) => {
-        console.log(event)
-        setTodoList((prevTodos) => [
+    const onAddClicked = (task: string) => {
+        console.log(task)
+        setTodos((prevTodos) => [
             ...prevTodos,
+            { id: prevTodos.length + 1, task, isDone: false }
         ]);
     }
 
     return (
         <>
-            <AddTodoItem onAddClicked={onAddClicked}/>
+            <AddTodoItem onAddClicked={onAddClicked} />
             {todos?.map((todo) => (
                 <TodoItem
                     key={todo.id}
