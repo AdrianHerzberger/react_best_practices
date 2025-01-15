@@ -1,34 +1,26 @@
+import { HttpAdapter } from "../adapters/HttpAdapter";
 import { Todo } from "../models/Todo";
 
 export class TodoService {
+    private readonly http: HttpAdapter;
+
+    constructor() {
+        this.http = new HttpAdapter({ baseUrl: "http://localhost:3001" });
+    }
+
     getAllTodos(): Promise<Todo[]> {
-        return fetch("http://localhost:3001/todos")
-            .then(response => response.json())
-            .then(data => data as Todo[]);
+        return this.http.get<Todo[]>("/todos")
     }
 
-    addTodo = async (task: string) => {
-        return fetch("http://localhost:3001/todos", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ todo: task, isDone: false })
-        }).then((response) => {
-            response.json();
-        });;
+    addTodo = (task: string) => {
+        return this.http.post("/todos", {todo: task})
     }
 
-    deleteTodo = async (id: number) => {
-        return fetch("http://localhost:3001/todos", {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ id: id})
-        }).then((response) => {
-            response.json();
-        });;    
+    editTodo = (id: number, task: string) => {
+        return this.http.put("/todo", {id, task})
     }
 
+    deleteTodo = (todoId: number) => {
+        return this.http.delete("/todo", {id: todoId})
+    }
 }

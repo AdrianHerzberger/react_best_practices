@@ -11,7 +11,7 @@ import { Grid2 } from "@mui/material";
 
 type TodoItemProps = {
     todo: Todo;
-    onEditClicked?: (id: number ) => void;
+    onEditClicked?: (id: number, task: string ) => void;
     onDeleteClicked?: (id: number) => void;
     onDoneChecked?: (id: number, isDone: boolean ) => void;
 };
@@ -20,7 +20,7 @@ export const TodoItem = memo(
     ({ todo, onDeleteClicked, onEditClicked, onDoneChecked }: TodoItemProps) => {
 
         const onClickEdit = () => {
-            onEditClicked && onEditClicked(todo.id );
+            onEditClicked && onEditClicked(todo.id, todo.task);
         };
 
         const onClickDelete = () => {

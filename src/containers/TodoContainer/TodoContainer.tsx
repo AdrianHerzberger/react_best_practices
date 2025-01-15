@@ -10,8 +10,8 @@ export const TodoContainer = () => {
 
     const todoService = useMemo(() => new TodoService(), []);
 
-    const fetchTodos = useCallback(() => {  
-        return todoService.getAllTodos().then((todos: Todo[]) => {  
+    const fetchTodos = useCallback(() => {
+        return todoService.getAllTodos().then((todos: Todo[]) => {
             setTodos(todos);
         });
     }, [todoService]);
@@ -21,17 +21,19 @@ export const TodoContainer = () => {
     }, [fetchTodos]);
 
     const onAddClicked = (task: string) => {
-        return todoService.addTodo(task).then(() => {   
+        return todoService.addTodo(task).then(() => {
             fetchTodos();
-        }); 
+        });
     };
 
-    const onEditClicked = (id: number) => {
-        console.log("Edit clicked for ID:", id);
+    const onEditClicked = (id: number, task: string) => {
+        return todoService.editTodo(id, task).then(() => {
+            fetchTodos();
+        });
     };
 
     const onDeleteClicked = (todoId: number) => {
-        return todoService.deleteTodo(todoId).then(() => {  
+        return todoService.deleteTodo(todoId).then(() => {
             fetchTodos();
         });
     };
@@ -58,4 +60,5 @@ export const TodoContainer = () => {
     );
 };
 
+export default TodoContainer;
 
