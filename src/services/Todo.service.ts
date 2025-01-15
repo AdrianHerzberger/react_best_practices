@@ -4,8 +4,8 @@ import { Todo } from "../models/Todo";
 export class TodoService {
     private readonly http: HttpAdapter;
 
-    constructor() {
-        this.http = new HttpAdapter({ baseUrl: "http://localhost:3001" });
+    constructor(httpAdapter: HttpAdapter) {
+        this.http = httpAdapter;
     }
 
     getAllTodos(): Promise<Todo[]> {
@@ -17,10 +17,10 @@ export class TodoService {
     }
 
     editTodo = (id: number, task: string) => {
-        return this.http.put("/todo", {id, task})
+        return this.http.put(`/todos/${id}`, {todo: task})
     }
 
     deleteTodo = (todoId: number) => {
-        return this.http.delete("/todo", {id: todoId})
+        return this.http.delete("/todos", {id: todoId})
     }
 }

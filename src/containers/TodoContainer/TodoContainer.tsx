@@ -1,14 +1,15 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { TodoItem } from "./TodoItem/TodoItem";
 import { Todo } from "../../models/Todo";
 import AddTodoItem from "../AddTodoContainer/AddTodoItem";
-import { TodoService } from "../../services/Tdodo.service";
+import { TodoService } from "../../services/Todo.service";
 
+type TodoContainerProps = {
+    todoService: TodoService;
+}
 
-export const TodoContainer = () => {
+export const TodoContainer = ({todoService }: TodoContainerProps) => {
     const [todos, setTodos] = useState<Todo[]>([]);
-
-    const todoService = useMemo(() => new TodoService(), []);
 
     const fetchTodos = useCallback(() => {
         return todoService.getAllTodos().then((todos: Todo[]) => {
