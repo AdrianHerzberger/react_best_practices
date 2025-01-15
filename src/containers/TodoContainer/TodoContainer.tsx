@@ -1,43 +1,46 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { TodoItem } from "./TodoItem/TodoItem";
 import { Todo } from "../../models/Todo";
 import AddTodoItem from "../AddTodoContainer/AddTodoItem";
+import { TodoService } from "../../services/Tdodo.service";
 
 
 export const TodoContainer = () => {
     const [todos, setTodos] = useState<Todo[]>([]);
 
-    useEffect(() => {
-        fetch("http://localhost:3001/todos").then((response) => {
-            response.json().then((toDoData) => {
-                setTodos(toDoData);
-            });
+    const todoService = useMemo(() => new TodoService(), []);
+
+    const fetchTodos = useCallback(() => {  
+        return todoService.getAllTodos().then((todos: Todo[]) => {  
+            setTodos(todos);
         });
-    }, []);
+    }, [todoService]);
 
-    const onEditClicked = ({ id }: { id: number }) => {
+    useEffect(() => {
+        fetchTodos();
+    }, [fetchTodos]);
+
+    const onAddClicked = (task: string) => {
+        return todoService.addTodo(task).then(() => {   
+            fetchTodos();
+        }); 
+    };
+
+    const onEditClicked = (id: number) => {
         console.log("Edit clicked for ID:", id);
-    }
+    };
 
-    const onDeleteClicked = ({ id }: { id: number }) => {
-        console.log("Delete clicked for ID:", id);
-        setTodos(todos.filter(todo => todo.id !== id));
-    }
+    const onDeleteClicked = (todoId: number) => {
+        return todoService.deleteTodo(todoId).then(() => {  
+            fetchTodos();
+        });
+    };
 
-    const onDoneChecked = ({ id, isDone }: { id: number; isDone: boolean }) => {
-        console.log("Done toggled for ID:", id, "isDone:", isDone);
+    const onDoneChecked = (id: number, isDone: boolean) => {
         setTodos(
             todos.map(todo => (todo.id === id ? { ...todo, isDone } : todo))
         );
     };
-
-    const onAddClicked = (task: string) => {
-        console.log(task)
-        setTodos((prevTodos) => [
-            ...prevTodos,
-            { id: prevTodos.length + 1, task, isDone: false }
-        ]);
-    }
 
     return (
         <>
@@ -52,7 +55,7 @@ export const TodoContainer = () => {
                 />
             ))}
         </>
-    )
+    );
 };
 
-export default TodoContainer;
+

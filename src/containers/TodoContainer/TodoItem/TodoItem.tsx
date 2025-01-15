@@ -11,24 +11,24 @@ import { Grid2 } from "@mui/material";
 
 type TodoItemProps = {
     todo: Todo;
-    onEditClicked?: ({ id }: { id: number }) => void;
-    onDeleteClicked?: ({ id }: { id: number }) => void;
-    onDoneChecked?: ({ id, isDone }: { id: number; isDone: boolean }) => void;
+    onEditClicked?: (id: number ) => void;
+    onDeleteClicked?: (id: number) => void;
+    onDoneChecked?: (id: number, isDone: boolean ) => void;
 };
 
 export const TodoItem = memo(
     ({ todo, onDeleteClicked, onEditClicked, onDoneChecked }: TodoItemProps) => {
 
         const onClickEdit = () => {
-            onEditClicked && onEditClicked({ id: todo.id });
+            onEditClicked && onEditClicked(todo.id );
         };
 
         const onClickDelete = () => {
-            onDeleteClicked && onDeleteClicked({ id: todo.id });
+            onDeleteClicked && onDeleteClicked(todo.id);
         };
 
         const onCheckDone = () => {
-            onDoneChecked && onDoneChecked({ id: todo.id, isDone: !todo.isDone });
+            onDoneChecked && onDoneChecked(todo.id, !todo.isDone );
         };
 
         return (
