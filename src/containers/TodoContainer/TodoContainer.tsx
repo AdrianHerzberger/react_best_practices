@@ -43,9 +43,9 @@ export const TodoContainer = (
     };
 
     const onDoneChecked = (id: number, isDone: boolean) => {
-        setTodos(
-            todos.map(todo => (todo.id === id ? { ...todo, isDone } : todo))
-        );
+        return todoService.updateTodo(id, {isDone}).then(() => {
+            fetchTodos();
+        });
     };
 
     const onCloseDrawer = () => {

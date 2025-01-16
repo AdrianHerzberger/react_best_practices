@@ -90,6 +90,7 @@ export const EditTodoItem = ({
         <CanvasField
           label="Hand Notes"
           value={editTodo?.handNotes}
+          onInput={(value) => onFormChanges({handNotes: value})}
         />
       </Box>
       <Box>
