@@ -14,7 +14,7 @@ export const CheckBoxField = memo(
         label,
         name = "",
         className,
-        onInput = () => { },
+        onInput,
         value,
     }: CheckBoxFieldProps) => {
         return (
@@ -23,7 +23,7 @@ export const CheckBoxField = memo(
                     name={name}
                     checked={value}
                     type="checkbox"
-                    onChange={(event) => onInput(event.target.checked)}
+                    onChange={(event) => onInput && onInput(event.target.checked)}
                 />
                 {label ? (
                     <label className="ml-1" htmlFor={name}>

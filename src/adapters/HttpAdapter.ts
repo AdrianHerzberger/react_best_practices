@@ -22,9 +22,9 @@ export class HttpAdapter {
         });
     }
 
-    async put<T>(url: string, data: T): Promise<any> {
+    async patch<T>(url: string, data: T): Promise<any> {
         return fetch(this.baseUrl + url, {
-            method: "PUT",
+            method: "PATCH",
             headers: {
                 "Content-Type": "application/json"
             },

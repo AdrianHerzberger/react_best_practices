@@ -1,4 +1,4 @@
-import React, { forwardRef, memo } from "react"
+import { forwardRef, memo } from "react"
 import classes from "./TextField.module.scss"
 
 interface TextFieldProps {
@@ -15,7 +15,8 @@ export const TextField = memo(
             return (
                 <div className={className}>
                     {!label ? null :
-                        <label htmlFor={name}>{label}
+                        <label htmlFor={name}>
+                            {label}
                         </label>
                     }
                     <input

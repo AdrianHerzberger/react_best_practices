@@ -8,6 +8,10 @@ export class TodoService {
         this.http = httpAdapter;
     }
 
+    getTodo = (id: number) => {  
+        return this.http.get<Todo>(`/todos/${id}`);
+    }
+
     getAllTodos(): Promise<Todo[]> {
         return this.http.get<Todo[]>("/todos")
     }
@@ -16,8 +20,8 @@ export class TodoService {
         return this.http.post("/todos", {todo: task})
     }
 
-    editTodo = (id: number, task: string) => {
-        return this.http.put(`/todos/${id}`, {todo: task})
+    updateTodo = (id: number, data: Partial<Todo>) => {
+        return this.http.patch<Partial<Todo>>(`/todos/${id}`, { ...data });
     }
 
     deleteTodo = (todoId: number) => {

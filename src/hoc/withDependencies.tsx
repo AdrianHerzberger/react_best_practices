@@ -1,4 +1,4 @@
-import { ElementType } from "react";
+import { ComponentProps, ElementType } from "react";
 import { container } from "../dependencies";
 
 export const WithDependencies = (
@@ -6,12 +6,12 @@ export const WithDependencies = (
     dependencies: {
         [key: string]: symbol
     }) => {
-    const props = {} as any;
+    const resolveDependencies = {} as any;
 
     Object.keys(dependencies).forEach((propName) => {
         const dependencyKey = dependencies[propName];
         const dependency = container.get(dependencyKey);
-        props[propName] = dependency;
+        resolveDependencies[propName] = dependency;
     });
-    return () => <Component {...props} />;
+    return (props: ComponentProps<typeof Component>) => <Component {...props} {...resolveDependencies} />;
 };
