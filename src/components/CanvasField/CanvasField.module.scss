@@ -1,4 +1,4 @@
-@import "../../styles/token";
+@use "../../styles/token" as *;
 
 .CanvasField {
   border: 2px solid #000000;

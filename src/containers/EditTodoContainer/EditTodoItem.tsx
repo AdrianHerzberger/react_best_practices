@@ -43,6 +43,7 @@ export const EditTodoItem = ({
   }, [todoId, todoService]);
 
   const onFormChanges = (updateTodo: Partial<TodoState>) => {
+    console.log(updateTodo)
     setEditTodo((currentState) => ({
       ...currentState,
       ...updateTodo,

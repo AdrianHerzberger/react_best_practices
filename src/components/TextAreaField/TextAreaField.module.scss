@@ -1,4 +1,4 @@
-@import "../../styles/token";
+@use "../../styles/token" as *;
 
 .TextAreaField {
   padding: $SPACE-2 $SPACE-3;

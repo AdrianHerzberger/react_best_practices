@@ -30,11 +30,13 @@ export const CanvasField = (
     );
 
     useEffect(() => {
-        if (value) {
+        if (value && canvasContext) {
             const image = new Image();
+            image.src = value;
             image.onload = () => {
-                canvasContext?.drawImage(image, 0, 0);
-            }
+                canvasContext.clearRect(0, 0, canvasRef.current!.width, canvasRef.current!.height);
+                canvasContext.drawImage(image, 0, 0);
+            };
         }
     }, [canvasContext, value]);
 
@@ -70,6 +72,10 @@ export const CanvasField = (
     }
 
     const endDrawing = () => {
+        setPreviousCoordinates({
+            x: 0,
+            y: 0,
+        });
         setIsDrawing(false);
         onInput(canvasRef.current?.toDataURL() || "");
     }
