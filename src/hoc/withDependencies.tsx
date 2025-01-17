@@ -1,7 +1,7 @@
 import { ComponentProps, ElementType } from "react";
 import { container } from "../dependencies";
 
-export const WithDependencies = (
+export const withDependencies = (
     Component: ElementType,
     dependencies: {
         [key: string]: symbol

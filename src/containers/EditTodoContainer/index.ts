@@ -1,7 +1,8 @@
 import { dependencies } from "../../dependencies";
-import { WithDependencies } from "../../hoc/withDependencies"
+import { withDependencies } from "../../hoc/withDependencies"
+import WithSideDrawer from "../../hoc/withSideDrawer/withSideDrawer";
 import {EditTodoItem} from "./EditTodoItem";
 
-export default WithDependencies(EditTodoItem, { 
+export default WithSideDrawer(withDependencies(EditTodoItem, { 
     todoService: dependencies.TodoService 
-});
+}));

@@ -1,5 +1,5 @@
 import { dependencies } from "../../dependencies";
-import { WithDependencies as withDependency } from "../../hoc/withDependencies";
+import { withDependencies as withDependency } from "../../hoc/withDependencies";
 import TodoContainer from "./TodoContainer";
 
 export default withDependency(TodoContainer, {

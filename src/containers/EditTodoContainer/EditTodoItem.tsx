@@ -1,12 +1,12 @@
-import classes from "./EditTodoItem.module.scss";
 import { Box, Grid2, Typography } from "@mui/material";
 import TextField from "../../components/TextField/TextField";
 import TextAreaField from "../../components/TextAreaField/TextAreaField";
 import CheckBoxField from "../../components/CheckBoxField/CheckBoxField";
 import Button from "../../components/Button/Button";
 import CanvasField from "../../components/CanvasField/CanvasField";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { TodoService } from "../../services/Todo.service";
+import classes from "./EditTodoItem.module.scss"
 
 type EditTodoItemProps = {
   todoId: number;
@@ -42,13 +42,12 @@ export const EditTodoItem = ({
     });
   }, [todoId, todoService]);
 
-  const onFormChanges = (updateTodo: Partial<TodoState>) => {
-    console.log(updateTodo)
+  const onFormChanges = useCallback((updateTodo: Partial<TodoState>) => {
     setEditTodo((currentState) => ({
       ...currentState,
       ...updateTodo,
     }));
-  } 
+  }, []);
 
   const handleSave = () => {
     if (editTodo) {
