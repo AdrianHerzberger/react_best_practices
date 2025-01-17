@@ -1,21 +1,21 @@
 import Textarea from '@mui/joy/Textarea';
 import { Box } from "@mui/material";
+import { memo } from 'react';
 
 type TextAreaFieldProps = {
   value?: string;
   name?: string;
   placeholder?: string;
   label?: string;
-  onInput:(value: string) => void;
+  onInput: (value: string) => void;
 };
 
-export const TextAreaField = (
-  {
-    value,
-    label,
-    name,
-    onInput,
-  }: TextAreaFieldProps) => {
+export const TextAreaField = memo(({
+  value,
+  label,
+  name,
+  onInput,
+}: TextAreaFieldProps) => {
   return (
     <Box
       sx={{ py: 2, display: 'grid', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}
@@ -26,15 +26,18 @@ export const TextAreaField = (
         </label>
         : null
       }
-      <Textarea 
-        name="Solid" 
-        placeholder="Type in here…" 
-        variant="plain" 
-        value={value} 
+      <Textarea
+        name="Solid"
+        placeholder="Type in here…"
+        variant="plain"
+        value={value}
         onChange={(event) => onInput(event.target.value)}
       />
     </Box>
   )
-};
+}
+);
+
+
 
 export default TextAreaField;

@@ -12,6 +12,12 @@ type TodoContainerProps = {
     todoService: TodoService;
 }
 
+const BUTTONSELECTOPTIONS = [
+    { label: "All", value: "all" },
+    { label: "Done", value: "true" },
+    { label: "Not done", value: "false" }
+];
+
 export const TodoContainer = (
     {
         todoService,
@@ -52,12 +58,6 @@ export const TodoContainer = (
         });
     };
 
-    const buttonSelectOptions = [
-        { label: "All", value: "all" },
-        { label: "Done", value: "true" },
-        { label: "Not done", value: "false" }
-    ];
-
     const onSelectTodoStateFilter = useCallback((value: string) => {
         setTodoStateFilter(value);
         return todoService.getAllTodos({query: {isDone: value}}).then((todos : Todo[]) => {
@@ -79,7 +79,7 @@ export const TodoContainer = (
                 <ButtonSelect
                     value={todoStateFilter}
                     onInput={onSelectTodoStateFilter}
-                    options={buttonSelectOptions}
+                    options={BUTTONSELECTOPTIONS}
                 />
             </Box>
 
