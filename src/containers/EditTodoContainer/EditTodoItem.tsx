@@ -4,15 +4,13 @@ import TextAreaField from "../../components/TextAreaField/TextAreaField";
 import CheckBoxField from "../../components/CheckBoxField/CheckBoxField";
 import Button from "../../components/Button/Button";
 import CanvasField from "../../components/CanvasField/CanvasField";
-import { useCallback, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { TodoService } from "../../services/Todo.service";
 import classes from "./EditTodoItem.module.scss"
+import { AppState } from "../../App";
 
 type EditTodoItemProps = {
-  todoId: number;
-  onSaveClicked?: () => void;
-  onCancelClicked?: () => void;
-  todoService: TodoService;
+  todoService?: TodoService;
 };
 
 type TodoState = {
@@ -22,13 +20,11 @@ type TodoState = {
   isDone?: boolean;
 };
 
-export const EditTodoItem = ({
-  todoId,
-  onSaveClicked,
-  onCancelClicked,
-  todoService,
-}: EditTodoItemProps) => {
-
+export const EditTodoItem = (
+  {
+    todoService,
+  }: EditTodoItemProps) => {
+  const { appState, setAppState } = useContext(AppState);
   const [editTodo, setEditTodo] = useState<TodoState | null>({
     task: "",
     description: "",
@@ -37,32 +33,28 @@ export const EditTodoItem = ({
   });
 
   useEffect(() => {
-    todoService.getTodo(todoId).then((todo) => {
+    todoService?.getTodo(appState.editTodoId).then((todo) => {
       setEditTodo(todo);
     });
-  }, [todoId, todoService]);
+  }, [appState.editTodoId, todoService]);
 
-  const onFormChanges = useCallback((updateTodo: Partial<TodoState>) => {
+  const onFormChanges = (updateTodo: Partial<TodoState>) => {
     setEditTodo((currentState) => ({
       ...currentState,
       ...updateTodo,
     }));
-  }, []);
+  }
 
-  const handleSave = () => {
+  const onButtonSaveClicked = () => {
     if (editTodo) {
-      todoService.updateTodo(todoId, editTodo).then(() => {
-        onSaveClicked && onSaveClicked();
+      todoService?.updateTodo(appState.editTodoId, editTodo).then(() => {
+        setAppState({ editTodoId: -1 });
       });
     }
   };
 
-  const onButtonSaveClicked = () => {
-    handleSave();
-  };
-
   const onButtonCancelClicked = () => {
-    onCancelClicked && onCancelClicked();
+    setAppState({ editTodoId: -1 });
   };
 
   return (
@@ -73,24 +65,24 @@ export const EditTodoItem = ({
           name="Task"
           label="Task"
           value={editTodo?.task}
-          onInput={(value) => onFormChanges({task: value})}
+          onInput={(value) => onFormChanges({ task: value })}
         />
         <CheckBoxField
           label="is Done"
           value={editTodo?.isDone}
-          onInput={(value) => onFormChanges({isDone: value})}
+          onInput={(value) => onFormChanges({ isDone: value })}
         />
         <TextAreaField
           name="description"
           label="Description"
           value={editTodo?.description}
           placeholder="Type something"
-          onInput={(value) => onFormChanges({description: value})}
+          onInput={(value) => onFormChanges({ description: value })}
         />
         <CanvasField
           label="Hand Notes"
           value={editTodo?.handNotes}
-          onInput={(value) => onFormChanges({handNotes: value})}
+          onInput={(value) => onFormChanges({ handNotes: value })}
         />
       </Box>
       <Box>

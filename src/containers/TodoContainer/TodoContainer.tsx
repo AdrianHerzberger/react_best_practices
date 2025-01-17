@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useContext, useEffect, useState } from "react"
 import { TodoItem } from "./TodoItem/TodoItem";
 import { Todo } from "../../models/Todo";
 import AddTodoItem from "../AddTodoContainer/AddTodoItem";
@@ -6,6 +6,7 @@ import { TodoService } from "../../services/Todo.service";
 import { EditTodoItem } from "../EditTodoContainer/EditTodoItem";
 import { ButtonSelect } from "../../components/ButtonSelect/ButtonSelect";
 import { Box } from "@mui/material";
+import { AppState } from "../../App";
 
 
 type TodoContainerProps = {
@@ -22,8 +23,8 @@ export const TodoContainer = (
     {
         todoService,
     }: TodoContainerProps) => {
+    const { appState, setAppState } = useContext(AppState);
     const [todos, setTodos] = useState<Todo[]>([]);
-    const [selectedTodo, setSelectedTodo] = useState<number>(-1);
     const [todoStateFilter, setTodoStateFilter] = useState<string>("all");
 
     const fetchTodos = useCallback(() => {
@@ -33,8 +34,10 @@ export const TodoContainer = (
     }, [todoService]);
 
     useEffect(() => {
-        fetchTodos();
-    }, [fetchTodos]);
+        if (appState.editTodoId === -1) {
+            fetchTodos();
+        }
+    }, [appState.editTodoId, fetchTodos]);
 
     const onAddClicked = (task: string) => {
         return todoService.addTodo(task).then(() => {
@@ -42,8 +45,8 @@ export const TodoContainer = (
         });
     };
 
-    const onEditClicked = (id: number) => {
-        setSelectedTodo(id);
+    const onEditClicked = (todoId: number) => {
+        setAppState({ editTodoId: todoId })
     };
 
     const onDeleteClicked = (todoId: number) => {
@@ -60,14 +63,10 @@ export const TodoContainer = (
 
     const onSelectTodoStateFilter = useCallback((value: string) => {
         setTodoStateFilter(value);
-        return todoService.getAllTodos({query: {isDone: value}}).then((todos : Todo[]) => {
+        return todoService.getAllTodos({ query: { isDone: value } }).then((todos: Todo[]) => {
             setTodos(todos);
         });
-    },[todoService]);
-
-    const onCloseDrawer = () => {
-        setSelectedTodo(-1);
-    }
+    }, [todoService]);
 
     return (
         <>
@@ -92,17 +91,10 @@ export const TodoContainer = (
                     onDoneChecked={onDoneChecked}
                 />
             ))}
-            {selectedTodo !== -1 ?
+            {appState.editTodoId === -1 ? null :
                 <EditTodoItem
-                    todoId={selectedTodo}
-                    onCancelClicked={onCloseDrawer}
-                    onSaveClicked={() => {
-                        setSelectedTodo(-1);
-                        fetchTodos();
-                    }}
                     todoService={todoService}
                 />
-                : null
             }
         </>
     );
