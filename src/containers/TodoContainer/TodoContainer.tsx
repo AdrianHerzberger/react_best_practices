@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { TodoItem } from "./TodoItem/TodoItem";
 import { Todo } from "../../models/Todo";
 import AddTodoItem from "../AddTodoContainer/AddTodoItem";
@@ -6,7 +6,8 @@ import { TodoService } from "../../services/Todo.service";
 import { EditTodoItem } from "../EditTodoContainer/EditTodoItem";
 import { ButtonSelect } from "../../components/ButtonSelect/ButtonSelect";
 import { Box } from "@mui/material";
-import { AppState } from "../../App";
+import { useAppState } from "../../hooks/useAppState";
+
 
 
 type TodoContainerProps = {
@@ -23,7 +24,7 @@ export const TodoContainer = (
     {
         todoService,
     }: TodoContainerProps) => {
-    const { appState, setAppState } = useContext(AppState);
+    const { appState, setAppState } = useAppState();
     const [todos, setTodos] = useState<Todo[]>([]);
     const [todoStateFilter, setTodoStateFilter] = useState<string>("all");
 
@@ -46,7 +47,7 @@ export const TodoContainer = (
     };
 
     const onEditClicked = (todoId: number) => {
-        setAppState({ editTodoId: todoId })
+        setAppState({ editTodoId: todoId, isDrawerOpen: true })
     };
 
     const onDeleteClicked = (todoId: number) => {

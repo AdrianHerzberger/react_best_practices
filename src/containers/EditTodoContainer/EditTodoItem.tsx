@@ -4,10 +4,11 @@ import TextAreaField from "../../components/TextAreaField/TextAreaField";
 import CheckBoxField from "../../components/CheckBoxField/CheckBoxField";
 import Button from "../../components/Button/Button";
 import CanvasField from "../../components/CanvasField/CanvasField";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { TodoService } from "../../services/Todo.service";
 import classes from "./EditTodoItem.module.scss"
-import { AppState } from "../../App";
+import { useAppState } from "../../hooks/useAppState";
+
 
 type EditTodoItemProps = {
   todoService?: TodoService;
@@ -24,7 +25,7 @@ export const EditTodoItem = (
   {
     todoService,
   }: EditTodoItemProps) => {
-  const { appState, setAppState } = useContext(AppState);
+  const { appState, setAppState } = useAppState();
   const [editTodo, setEditTodo] = useState<TodoState | null>({
     task: "",
     description: "",
@@ -45,16 +46,17 @@ export const EditTodoItem = (
     }));
   }
 
-  const onButtonSaveClicked = () => {
+  const onButtonSaveClicked = useCallback(() => {
     if (editTodo) {
       todoService?.updateTodo(appState.editTodoId, editTodo).then(() => {
-        setAppState({ editTodoId: -1 });
+        setAppState({ editTodoId: -1, isDrawerOpen: false });
       });
     }
-  };
+  }, [appState.editTodoId, editTodo, setAppState, todoService]);
+
 
   const onButtonCancelClicked = () => {
-    setAppState({ editTodoId: -1 });
+    setAppState({ editTodoId: -1, isDrawerOpen: false });
   };
 
   return (
