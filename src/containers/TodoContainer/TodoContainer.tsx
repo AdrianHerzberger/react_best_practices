@@ -82,7 +82,6 @@ export const TodoContainer = (
                     options={BUTTONSELECTOPTIONS}
                 />
             </Box>
-
             {todos?.map((todo) => (
                 <TodoItem
                     key={todo.id}

@@ -7,9 +7,9 @@ export const Header = () => {
     <header className={classes.Header}>
       <div className={classes.HeaderTitle}>Tasks App</div>
       <nav className="m-auto">
-        <HeaderLink to="/">Home</HeaderLink>
-        <HeaderLink to="/stats">Stats</HeaderLink>
-        <HeaderLink to="/about">About</HeaderLink>
+        <HeaderLink url="/">Home</HeaderLink>
+        <HeaderLink url="/about">About</HeaderLink>
+        <HeaderLink url="/stats">Stats</HeaderLink>
       </nav>
     </header>
   );
