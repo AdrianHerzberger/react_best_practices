@@ -33,11 +33,15 @@ export const EditTodoItem = (
     isDone: false
   });
 
-  useEffect(() => {
+  const getTodos = useCallback(() => {
     todoService?.getTodo(appState.editTodoId).then((todo) => {
       setEditTodo(todo);
     });
-  }, [appState.editTodoId, todoService]);
+  },[appState.editTodoId, todoService])
+
+  useEffect(() => {
+    getTodos();
+  }, [getTodos]);
 
   const onFormChanges = (updateTodo: Partial<TodoState>) => {
     setEditTodo((currentState) => ({
